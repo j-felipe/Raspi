@@ -11,6 +11,7 @@
 #define   dataPin   0   //DS Pin of 74HC595(Pin14)
 #define   latchPin  2   //ST_CP Pin of 74HC595(Pin12)
 #define   clockPin 3    //CH_CP Pin of 74HC595(Pin11)
+#define	  outputEnable  7  // Output enable pin of  74HC595 (Pin13)
 
 void _shiftOut(int dPin,int cPin,int order,int val){   
 	int i;  
@@ -41,6 +42,8 @@ int main(void)
 	pinMode(dataPin,OUTPUT);
 	pinMode(latchPin,OUTPUT);
 	pinMode(clockPin,OUTPUT);
+	pinMode(outputEnable,OUTPUT);
+	digitalWrite(outputEnable, LOW);
 	while(1){
 		x=0x01;
 		for(i=0;i<8;i++){
