@@ -4,9 +4,9 @@
 * Author      : www.freenove.com
 * modification: 2019/12/27
 **********************************************************************/
-//#include <wiringPi.h>
+#include <wiringPi.h>
 #include <stdio.h>
-//#include <wiringShift.h>
+#include <wiringShift.h>
 #include <time.h>
 
 #define   dataPin   0   //DS Pin of 74HC595(Pin14)
@@ -44,21 +44,21 @@ int main(void){
 	pinMode(outputEnable,OUTPUT);
 	digitalWrite(outputEnable, LOW);
 
-    int shiftime = 100 ;
-    int fracOn = 10 ; 
+    long int shiftime = 100 ;
+    long int fracOn = 50 ; 
     unsigned char x;
     unsigned char countpos = 0;
     unsigned char writeflg;
-    int timeOn = (shiftime/100)*fracOn ;
-    int timeOff = shiftime - timeOn ;
+    long int timeOn = (shiftime/100)*fracOn ;
+    long int timeOff = shiftime - timeOn ;
     
     clock_t initime = clock();    
     clock_t endtime ;
     x=0x01;
     writeflg = 1 ;
     while (1){
-        endtime = (clock() - initime)/CLOCKS_PER_SEC/1000 ;
-        
+        endtime = ((float)clock() - initime)/CLOCKS_PER_SEC*1000 ;
+        //printf("end time  %d ini time %d \n",endtime,initime);
 
         if ((endtime < timeOn) && (writeflg == 1)){
             digitalWrite(latchPin,LOW);		// Output low level to latchPin
@@ -79,10 +79,10 @@ int main(void){
             if (countpos < 8 ){
                 x<<=1;
             }
-            else if (countpos >= 8){
+            else if (countpos >= 8 && countpos < 15){
                 x>>=1;
             }
-            else (countpos > 15){
+            else if (countpos >= 15){
                 countpos = 0;
             }
            
