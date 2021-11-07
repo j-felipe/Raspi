@@ -7,6 +7,7 @@
 #include <wiringPi.h>
 #include <stdio.h>
 #include <wiringShift.h>
+#include <time.h>
 
 #define   dataPin   0   //DS Pin of 74HC595(Pin14)
 #define   latchPin  2   //ST_CP Pin of 74HC595(Pin12)
@@ -51,7 +52,7 @@ int main(void)
 			_shiftOut(dataPin,clockPin,LSBFIRST,x);// Send serial data to 74HC595
 			digitalWrite(latchPin,HIGH);   //Output high level to latchPin, and 74HC595 will update the data to the parallel output port.
 			x<<=1;      //make the variable move one bit to left once, then the bright LED move one step to the left once.
-			delay(100);
+			delay(10);
 		}
 		x=0x80;
 		for(i=0;i<8;i++){
@@ -59,7 +60,7 @@ int main(void)
 			_shiftOut(dataPin,clockPin,LSBFIRST,x);
 			digitalWrite(latchPin,HIGH);
 			x>>=1;
-			delay(100);
+			delay(10);
 		}
 	}
 	return 0;
