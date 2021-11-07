@@ -47,15 +47,15 @@ int main(void){
     long int shiftime = 100 ;
     long int pwmttime = 20 ;
     long int pwmtime = 0;
-    long int fracOn = 50 ; 
+    long int fracOn = 90 ; 
     unsigned char x;
     unsigned char countpos = 0;
     unsigned char writeflg;
-    long int timeOn = (pwmttime/100)*fracOn ;
+    long int timeOn = ((float)pwmttime/100)*fracOn ;
     long int timeOff = pwmttime - timeOn ;
     
     clock_t initime = clock();   
-    clock_t pwninitime = clock(); 
+    clock_t pwminitime = clock(); 
     clock_t endtime ;
     x=0x01;
     writeflg = 1 ;
@@ -76,7 +76,9 @@ int main(void){
         }
         else if (pwmtime >= timeOn && pwmtime < timeOff){
             digitalWrite(outputEnable, HIGH);
-            pwninitime = clock();
+        }	
+	else if (pwmtime >= pwmttime){
+	    pwminitime = clock ();
         }
 
         if (endtime > shiftime ){
