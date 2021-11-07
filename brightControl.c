@@ -45,31 +45,38 @@ int main(void){
 	digitalWrite(outputEnable, LOW);
 
     long int shiftime = 100 ;
+    long int pwmttime = 20 ;
+    long int pwmtime = 0;
     long int fracOn = 50 ; 
     unsigned char x;
     unsigned char countpos = 0;
     unsigned char writeflg;
-    long int timeOn = (shiftime/100)*fracOn ;
-    long int timeOff = shiftime - timeOn ;
+    long int timeOn = (pwmttime/100)*fracOn ;
+    long int timeOff = pwmttime - timeOn ;
     
-    clock_t initime = clock();    
+    clock_t initime = clock();   
+    clock_t pwninitime = clock(); 
     clock_t endtime ;
     x=0x01;
     writeflg = 1 ;
     while (1){
         endtime = ((float)clock() - initime)/CLOCKS_PER_SEC*1000 ;
+        pwmtime = ((float)clock() - pwminitime)/CLOCKS_PER_SEC*1000 ;
         //printf("end time  %d ini time %d \n",endtime,initime);
 
-        if ((endtime < timeOn) && (writeflg == 1)){
+        if ((shiftime < endtime) && (writeflg == 1)){
             digitalWrite(latchPin,LOW);		// Output low level to latchPin
 			_shiftOut(dataPin,clockPin,LSBFIRST,x);// Send serial data to 74HC595
 			digitalWrite(latchPin,HIGH);   //Output high level to latchPin, and 74HC595 will update the data to the parallel output port.
-            digitalWrite(outputEnable, LOW);
             writeflg = 0;
         }
 
-        if (endtime >= timeOn){
+        if (pwmtime < timeOn){
+            digitalWrite(outputEnable, LOW);
+        }
+        else if (pwmtime >= timeOn && pwmtime < timeOff){
             digitalWrite(outputEnable, HIGH);
+            pwninitime = clock();
         }
 
         if (endtime > shiftime ){
